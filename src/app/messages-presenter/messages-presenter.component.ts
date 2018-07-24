@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {MessagesConsumerService} from '../messages-consumer.service';
 import {Message} from '../interfaces';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-messages-presenter',
@@ -13,19 +13,21 @@ export class MessagesPresenterComponent implements OnInit, OnDestroy {
   messages: Set<Message> = new Set();
   nextTickEmitter: Subject<number> = new Subject();
   private tickerTimerId: number;
+  private newMessageEventSuscription: Subscription;
 
   constructor(private messagesConsumerService: MessagesConsumerService) {
     this.emitMessagesExpirationCheck();
   }
 
   ngOnInit() {
-    this.messagesConsumerService.newMessageEventEmitter.subscribe((newMessage) => {
+    this.newMessageEventSuscription = this.messagesConsumerService.newMessageEventEmitter.subscribe((newMessage) => {
       this.messages.add(newMessage);
     });
   }
 
   ngOnDestroy() {
     window.clearInterval(this.tickerTimerId);
+    this.newMessageEventSuscription.unsubscribe();
   }
 
   // use in ngFor trackBy for performance improvements;
