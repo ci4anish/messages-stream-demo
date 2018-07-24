@@ -1,0 +1,10 @@
+<mat-card class="example-card">
+  <img *ngIf="message.type === 'image'" mat-card-image src="{{message.imgSrc}}"
+       alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    <!--If message type is ASCIItext then convert before showing-->
+    <p>
+      {{message.message | fromASCII: message.type}}
+    </p>
+  </mat-card-content>
+</mat-card>

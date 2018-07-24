@@ -1,0 +1,7 @@
+<p>Messages: </p>
+<app-message-item
+  *ngFor="let message of messages; trackBy: identify"
+  [message]="message"
+  [nextTickEmitter]="nextTickEmitter"
+  (expired)="onMessageExpire(message)"
+></app-message-item>
